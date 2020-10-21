@@ -1,0 +1,108 @@
+/*
+Figure 12.35: The program prompts the user to enter a specific menu choice, and name of the employee.
+The program then prints the corresponding memo for the employee.
+*/
+//Ahmed Muntasir Hossain - 09/28/2020
+
+#include <stdio.h>
+#include <string.h> // For strrchr().
+#include <ctype.h> // For toupper().
+typedef const char* cstring;
+
+#define N 4 // Number of memo menu choices
+const char* menu[N] = {"P Promote", "T Trip", "F Fire", "Q Done"};
+
+#define BOSS "Leland Power"
+
+char menu_c(cstring title, int n, cstring menu[], cstring valid);
+void compose(char* name, char* re, char* eventStr); // Modifies name.
+
+int main()
+{
+  char memo; // Menu choice.
+  char* re; // Subject of memo
+  char* eventStr; //Main text of memo.
+  char name[52]; // Employee’s complete name.
+
+  puts("\n Magic Memo Maker");
+
+  for(;;) 
+  {
+    cstring valid = "PpTtFfQq";
+    memo = toupper(menu_c(" Next memo:", N, menu, valid));
+
+    if (memo == 'Q') 
+      break; // Leave for loop and end program.
+
+    switch (memo) 
+    {
+      case 'P': 
+      re = "Promotion";
+      eventStr = "You are being promoted to assistant manager.";
+      break;
+
+      case 'T':
+      re = "Trip";
+      eventStr = "You are tops this year "
+      "and have won a trip to Hawaii.";
+      break;
+
+      case 'F': 
+      re = "Downsizing";
+      eventStr = "You’re fired.\n "
+      "Pick up your final paycheck from personnel.";
+      break;
+    }
+
+    printf(" Enter name: ");
+    scanf(" %51[^\n]", name );
+    compose(name, re, eventStr);
+  }
+
+  return 0;
+}
+
+char menu_c(cstring title, int n, cstring menu[], cstring valid )
+{
+  char ch;
+  printf("\n%s\n\n", title);
+
+  for(;;)
+  {
+    for(int k = 0; k < n; ++k) 
+      printf("\t%s \n", menu[k]);
+    
+    printf("\n Enter code of desired item: ");
+    scanf(" %c", &ch);
+
+    if (strchr(valid, ch)) 
+      break;
+
+    while (getchar() != '\n'); // Discard rest of input line 
+    puts(" Illegal choice or input error; try again.");
+  }
+
+  return ch;
+}
+
+void compose( char* name, char* re, char* eventStr )
+{
+  char* extra, * last; // Pointers used for parsing name.
+
+  printf("\n\n To: %s\n", name);
+  printf(" From: The Big Boss\n");
+  printf(" Re: %s\n\n", re);
+
+  extra = strchr(name, ','); // Find end of last name.
+  if (extra != NULL) 
+    *extra = '\0'; // Mark end of last name.
+
+  last = strrchr(name, ' '); // Find beginning of last name.
+  if (last == NULL) 
+    last = name;
+  else 
+    ++last;
+
+  printf(" Dear M. %s:\n %s\n\n -- %s\n\n", last, eventStr, BOSS);
+}
+
