@@ -1,0 +1,63 @@
+/*
+Question 2. Tables:
+The program prints a table consisting of 31 instances, starting with n = 0 and ending with n = 30.
+It prints the values of the functions f1(n,x) and f2(n,x) for their respective values of n and x. 
+The value of x is inputted by the user in the beginning.  
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <math.h>
+
+double function_1(int n, double x); //returns f1(n,x) = e^((nx)^0.5)*sin(nx)
+double function_2(int n, double x); //returns f2(n,x) = e^((nx)^0.5)*cos(nx)
+
+int main() 
+{
+  double x;
+
+  /*
+  this section restricts the value of x between 0.1 and 2.5, inclusive. 
+  Prompts the user to re-enter value of x if it is not within the range.
+  */
+  do
+  {
+  printf("\nInput value for x (x must be between 0.1 and 2.5, inclusive): ");
+  scanf("%lg", &x);
+
+  if(x < 0.1)
+    printf("x is less than 0.1. Incorrect input for x. Please try again.\n");
+  else if(x > 2.5)
+    printf("x is greater than 2.5. Incorrect input for x. Please try again.\n");
+  }
+  while(x < 0.1 || x > 2.5);
+  printf("The value of x is %g\n", x);
+
+  //print header of the table
+  printf("\nFunction f1(n,x) and f2(n,x) table: \n");
+  printf("\n n         f1(n,x)        f2(n,x) \n---------------------------------\n");
+
+  /*
+  print the values of each iteration of the functions, f1(n,x) and f2(n,x), 
+  to 3 decimal places, for their respective values of n.
+  */
+  for(int n=0; n<=30; n++) 
+  {
+    printf("%2i      %9.3f      %9.3f\n", n, function_1(n, x), function_2(n, x));
+  }
+  
+  return 0;
+}
+
+double function_1(int n, double x)
+{
+  double f_1 = exp(pow(n*x, 0.5)) * sin(n*x); 
+  return f_1;
+}
+
+double function_2(int n, double x)
+{
+  double f_2 = exp(pow(n*x, 0.5)) * cos(n*x); 
+  return f_2;
+}
+

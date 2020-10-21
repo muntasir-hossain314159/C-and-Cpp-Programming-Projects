@@ -1,0 +1,49 @@
+/*
+Question 5. Geometric Series: 
+The program calculates and prints the first 50 terms of a geometric series.
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <float.h>
+#include <math.h>
+
+double term(double a, double R, double k); //returns the kth term of the geometric series
+
+int main() {
+
+  double a,R;
+  printf("\nEnter the first term (a) of the series: ");
+  scanf("%lg", &a);
+  printf("Enter the common ratio (R): ");
+  scanf("%lg", &R);
+
+  printf("\n Geometric Series: \n\n");
+  for(double k=1; k<=50; k++) //iterates through 50 terms and prints the respective values of the kth term
+  {
+    double value_of_term = term(a, R, k);
+
+    //program breaks from loop if floating point overflow or underflow occurs
+    if(value_of_term < DBL_MIN || value_of_term > DBL_MAX) 
+      break;
+
+    printf("%2g. %-10e   ", k, value_of_term); 
+
+    /*
+    modulo function works with integers. Since, k is a double, it is explicitly casted to an int.
+    Prints new line after 5 terms.
+    */
+    if((int) k%5==0) 
+    {
+      printf("\n");
+    }
+  }
+
+  return 0;
+}
+
+double term(double a, double R, double k)
+{
+  return a * pow(R, (k-1));
+}
+

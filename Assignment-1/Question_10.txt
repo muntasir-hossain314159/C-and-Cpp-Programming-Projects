@@ -1,0 +1,148 @@
+/*
+Question 10. Scheduled time of arrival: 
+The program allows the user to compute the scheduled local arrival time of a flight.
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <ctype.h>
+
+/*
+promts the user to input the takeoff time, duration of the flight, direction of travel, 
+and whether the international date line has been crossed or not
+*/
+void input(); 
+void destination_time_calculator(int, int, int, int, int, int); //calculates the local arrival time of the flight
+
+int main() {
+  char response;
+  //allows the user to calculate the arrival time of different flights
+  do
+  {
+  input();
+  printf("\nEnter 'Y' to calculate arrival time for a different flight, and 'N' to exit: ");
+  scanf(" %c", &response);
+  response = toupper(response);
+  }
+  while(response == 'Y');
+  return 0;
+}
+
+void input()
+{
+  // promts the user to enter the takeoff time in hours and minutes. Format specified HH:MM.
+  int hours, minutes; //hours = scheduled takeoff time (hours), minutes = scheduled takeoff time (minutes)
+  //ensures that the user enters valid values for the takeoff time
+  do
+  {
+  printf("\nEnter the takeoff time (HH:MM) in hours (0-23) and minutes (0-59): ");
+  scanf("%d:%d", &hours, &minutes);
+  if(hours < 0 || hours > 23)
+    printf("Hours must be between 0-23. Please try again.\n");
+  if(minutes < 0 || minutes > 59)
+    printf("Minutes must be between 0-59. Please try again.\n");
+  }
+  while(hours < 0 || hours > 23 || minutes < 0 || minutes > 59);
+  printf("Takeoff time is %02d:%02d\n", hours, minutes);
+
+  //promts the user to enter duration of the flight in hours and minutes. Format specified HH:MM.
+  int duration_hours, duration_minutes;
+  printf("\nEnter the duration of the flight in hours and minutes (HH:MM): ");
+  scanf("%d:%d", &duration_hours, &duration_minutes);
+  printf("Duration of the flight is %02d hours and %02d minutes.\n", duration_hours, duration_minutes);
+
+  /*
+  promts the user to enter the number of timezones crossed. 
+  Valid number of timezones crossed is between 0 to 23, inclusive.
+  */
+  int number_of_timezones;
+  do
+  {
+  printf("\nEnter the number of timezone boundaries the flight will cross: ");
+  scanf("%d", &number_of_timezones);
+  if(number_of_timezones < 0)
+    printf("Number of timezone boundaries have to be greater than or equal to 0. Please try again.\n");
+  else if(number_of_timezones > 23)
+    printf("Number of timezone boundaries have to be less than or equal to 23. Please try again.\n");
+  }
+  while(number_of_timezones < 0 || number_of_timezones > 23);
+
+  //promts the user to enter the direction of travel of the flight. User re-enters the direction if input is incorrect.
+  char response;
+  do
+  {
+  printf( "Enter 'E' if the flight is travelling East to West, or\n" 
+          "Enter 'W' if the flight is travelling West to East: ");
+  scanf(" %c", &response);
+  response = toupper(response);
+
+  //change in hour is negative if travelling from East to West
+  if(response == 'E')
+    number_of_timezones = -number_of_timezones;
+  else if(response != 'W')
+    printf("Incorrect input for direction of travel! Please try again.\n\n");
+  }
+  while(response != 'E' && response != 'W');
+  //number of time zone boundaries crossed = number of hours gained/lost
+  printf("Number of hours gained or lost after crossing timezone boundaries is %d.\n\n", number_of_timezones);
+
+  /*
+  promts the user to enter whether the international date line has been crossed or not. 
+  User re-enters response if input is incorrect.
+  */
+  char response_date_line;
+  int day; //gain or loss or no change in day due to crossing/not crossing the international date line
+  do
+  {
+  printf("Enter 'Y' if the international date line will be crossed, " 
+  "or enter 'N' if the international date line will not be crossed: ");
+  scanf(" %c", &response_date_line);
+  response_date_line = toupper(response_date_line);
+
+  //change in day depending on the date line being crossed and the direction of travel
+  if(response_date_line == 'Y' && response == 'E')
+  day = 1;
+  else if(response_date_line == 'Y' && response == 'W')
+  day = -1;
+  else if(response_date_line == 'N')
+  day = 0;
+  else
+  printf("Incorrect input for international date line! Please try again.\n\n");
+  }
+  while(response_date_line != 'Y' && response_date_line != 'N');
+
+  //calls destination_time_calculator function to calculate the local arrival time of the flight
+  destination_time_calculator(hours, minutes, duration_hours, duration_minutes, number_of_timezones, day);
+}
+
+  void destination_time_calculator(int hours, int minutes, int duration_hours, int duration_minutes, int number_of_timezones, int day)
+  {
+    //number of timezones = number of hours gained/lost. The answer is added to the departure hour time (hours).
+    hours += number_of_timezones; 
+
+    //local arrival hour time (destination_hour) = duration of the flight (duration_hours) + departure hour time (hours)
+    int destination_hour = hours + duration_hours; 
+    //local arrival minute time (destination_minute) = duration of the flight (duration_minutes) + departure minute time (minutes)
+    int destination_minute = minutes + duration_minutes;
+
+    //covert local arrival minute time to the valid range (0-59) and add the excess minutes to the arrival hour time
+    destination_hour = destination_hour + destination_minute/60; 
+    destination_minute %= 60;
+
+    //covert local arrival hour time to the valid range (0-23) and add the excess hours to the arrival day time (destination_day)
+    int destination_day = destination_hour/24;
+    destination_hour %= 24;
+
+    //day gained or lost due to international date line is added to the arrival day time
+    destination_day += day;
+
+    printf("\nThe destination time of the flight is %02d:%02d", destination_hour, destination_minute);
+    //printing day gained or lost
+    if(destination_day > 0)
+    printf(", +%d day.\n", destination_day);
+    else if(destination_day < 0)
+    printf(", %d day.\n", destination_day);
+    else
+      printf(".\n"); //no day change
+  }
+

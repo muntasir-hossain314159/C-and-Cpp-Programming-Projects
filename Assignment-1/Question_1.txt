@@ -1,0 +1,39 @@
+/*
+Question 1. Function: 
+The program calculates the value of a function f(x), 
+sums its value in steps of 50 from 0 to 1000, and prints the values in a table.
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <math.h>
+
+double math_function(int x); //returns the value of f(x) = (3x + 1) ^ 0.5
+
+int main() 
+{
+  printf("\nFunction f(x) table: \n");
+  printf("\n   x           f(x)             sum\n");
+  printf("-----------------------------------\n");
+
+  int i=0;
+  double sum=0;
+
+  /*
+  prints the value of x, f(x), and the current sum at each step from x = 0 to x = 1000 in a table.
+  The loop iterates in steps of 50
+  */
+  for(i=0; i<=1000; i=i+50) 
+  {
+    sum+=math_function(i); //sum = the current value of f(x) + previous value of the sum
+    printf("%4i      %9f      %10f\n", i, math_function(i), sum);
+  }
+
+  return 0;
+}
+
+double math_function(int x)
+{
+  return pow((3*x+1),0.5);
+}
+

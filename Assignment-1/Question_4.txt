@@ -1,0 +1,48 @@
+/*
+Question 4. Arithmetic Series: 
+The program calculates and prints the first 100 terms of an arithmetic series.
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <limits.h>
+
+long term(long a, long d, long k); //returns the kth term of the arithmetic series
+
+int main() {
+
+  long a,d;
+  printf("\nEnter the first term (a) of the series: ");
+  scanf("%ld", &a);
+  printf("Enter the difference (d) between two adjacent terms: ");
+  scanf("%ld", &d);
+
+  printf("\n Arithmetic Series: \n\n");
+  for(long k=1; k<=100; k++) //iterates through 100 terms and prints the respective values of the kth term
+  {
+    long value_of_term = term(a, d, k);
+    if((LONG_MAX - value_of_term) < d) //the program breaks from loop if overflow occurs
+    {
+      /*prints the largest number in the arithmetic series within the value range of long before overflow occurs 
+      and breaks the loop
+      */
+      printf("%3ld. %-10ld   ", k, value_of_term); 
+      break;
+    }
+
+    printf("%3ld. %-10ld   ", k, value_of_term);
+
+    if(k%5==0) //prints new line after 5 terms
+    {
+      printf("\n");
+    }
+  }
+
+  return 0;
+}
+
+long term(long a, long d, long k)
+{
+  return a + (k-1) * d;
+}
+

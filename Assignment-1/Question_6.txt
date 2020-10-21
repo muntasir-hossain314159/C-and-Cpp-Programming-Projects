@@ -1,0 +1,89 @@
+/*
+Question 6. Torque: 
+The program allows the user to compute several torques of a disk, 
+after providing the mass, radius, and angular acceleration of the disk.
+*/
+//Ahmed Muntasir Hossain - 09/04/2020
+
+#include <stdio.h>
+#include <ctype.h>
+
+/*
+prompts the user to input values for mass, radius, and angular acceleration of the disk.
+Prints the torque of the disk
+*/
+void work(); 
+double moment(double radius, double mass); //returns the moment of inertia of the disk
+double torque(double I, double acc); //returns the torque of the disk
+
+int main() {
+  char response;
+  printf("\nTorque Calculator:\n");
+
+  //allows the user to calculate a new torque of a disk
+  do
+  {
+    work();
+    printf("\nEnter Y to continue, and N to exit: "); //prompts the user to continue or exit the program
+    scanf(" %c", &response);
+    response = toupper(response);
+  }
+  while(response == 'Y');
+
+  printf("\nProgram has exited!");
+  return 0;
+}
+
+void work()
+{
+  double radius, mass, acc;
+
+  /*
+  restricts the radius of the disk to 0.093 and 0.207, inclusive. 
+  Prompts the user to re-enter value of the radius if it is not within the range.
+  */
+  do
+  {
+  printf("\nEnter the radius of the disk (radius must be between 0.093 and 0.207, inclusive): ");
+  scanf("%lg", &radius);
+
+  if(radius < 0.093)
+    printf("Radius of the disk is less than 0.093. Incorrect input for radius. Please try again.\n");
+  else if(radius > 0.207)
+    printf("Radius of the disk is greater than 0.207. Incorrect input for radius. Please try again.\n");
+  }
+  while(radius < 0.093 || radius > 0.207);
+  
+  /*
+  restricts the mass of the disk to be greater than 0.088 and less than or equal to 11. 
+  Prompts the user to re-enter value of the mass if it is not within the range.
+  */
+  do
+  {
+  printf("Enter the mass of the disk (mass must be greater than 0.088 and less than or equal to 11): ");
+  scanf("%lg", &mass);
+
+  if(mass <= 0.088)
+    printf("Mass of the disk is less than or equal to 0.088. Incorrect input for mass. Please try again.\n");
+  else if(mass > 11)
+    printf("Mass of the disk is greater than 11. Incorrect input for mass. Please try again.\n");
+  }
+  while(mass <= 0.088 || mass > 11);
+
+  printf("Enter the angular acceleration of the disk: ");
+  scanf("%lg", &acc);
+
+  double I = moment(radius, mass); //moment of inertia of the disk
+  printf("The torque of the disk is %g Nm.\n",torque(I, acc));
+}
+
+double moment(double radius, double mass)
+{
+  return 0.5 * mass * radius * radius;
+}
+
+double torque(double I, double acc)
+{
+  return I * acc; //I = moment of inertia, acc = angular acceleration
+}
+
