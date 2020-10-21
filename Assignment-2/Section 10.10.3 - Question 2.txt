@@ -1,0 +1,82 @@
+/*
+Question 2. Global warming: 
+The program allows the user to input temperatures for a month, and calculate the average temperature and number of hot days.
+*/
+//Ahmed Muntasir Hossain - 09/09/2020
+
+#include <stdio.h>
+
+//reads temperature values inputted by the user and stores in temps[] array. Returns actual number of temperatures read
+int read_temps(double temps[]); 
+int hot_days(int num_temps, double temps[]); //returns the number of days that exceed 32 F
+//prints the temperatures of the month in a table, followed by average temperature and number of hot days 
+void print_temps(int num_temps, double temps[], int count_hot_days); 
+
+int main()
+{
+  double temps[31]; //array storing temperature values inputted by the user
+  int num_temps; //actual number of temperatures read
+  int count_hot_days; //number of days that exceed 32 F
+  
+  num_temps = read_temps(temps); //calls read_temps() and assigns the number of temperatues read to num_temps
+
+  count_hot_days = hot_days(num_temps, temps); //calls hot_days() and assigns the number of hot days (over 32 F) to count_hot_days
+
+  print_temps(num_temps, temps, count_hot_days); //calls print_temps()
+
+  return 0;
+}
+
+int read_temps(double temps[])
+{
+  double temperature;
+  int i=1;
+
+  printf("\nEnter temperature data: \n\n");
+  while(temperature != -500) //-500 is the sentinel value, signalling the end of input by the user
+  {
+    printf("%2d.  ",i);
+    scanf("%lg", &temperature);
+
+    //i-1 because i was initialized to 1 to indicate that it is the 1st temperature being read in the print statement above
+    temps[i-1] = temperature; 
+    i++; //increments index of the array
+  }
+
+  return i-2; //returns the actual number of temperatures read (excludes -500 and the last increment)
+}
+
+int hot_days(int num_temps, double temps[])
+{
+  int count_over_32F = 0; //number of days exceeding 32 F
+
+  for(int i=0; i<num_temps; i++)
+  {
+    if(temps[i] > 32) //checks whether the temperature value is greater than 32 F
+    { 
+      count_over_32F++; //increments counter
+    }
+  }
+
+  return count_over_32F; //returns the number of days calculated
+}
+
+void print_temps(int num_temps, double temps[], int count_hot_days)
+{
+  double sum = 0; //sum of the temperatures for the mean value
+
+  printf("\nTemperatures for the Month in degree Fahrenheit: \n");
+  printf("------------------------------------------------\n");
+  for(int i=0; i<num_temps; i++) //prints temperature values in a table
+  {
+    printf("Day %2d: %4.2f\n",i+1, temps[i]);
+    
+    sum += temps[i];
+  }
+
+  double average_temp = sum / (double) num_temps; //computes mean = sum of temperatures / number of days
+  printf("\nAverage temperature of the month: %.2f F\n",average_temp);
+
+  printf("Number of hot days exceeding 32 F: %d\n", count_hot_days);
+}
+

@@ -1,0 +1,63 @@
+/*
+Question 1. Seeing bits:
+The program converts an integer (base 10) to binary (base 2), and prints the binary number.
+*/
+//Ahmed Muntasir Hossain - 09/09/2020
+
+#include <stdio.h>
+
+//converts integer (base 10) to binary (base 2), and returns the number of digits in the binary number
+int binary_calculator(int, int[], int); 
+
+int main() 
+{
+  int number, binary_array[1000]; //number = non negative integer inputted by user, binary_array = stores the binary digits 
+
+  //prompts user to input a non negative integer. Shows error message if number is negative, and allows the user to re-enter value.
+  do 
+  {
+  printf("\nPlease input a non negative integer (base 10): ");
+  scanf("%d", &number);
+
+  if(number < 0)
+    printf("Number inputted must be a non negative integer (greater than or equal to 0). Please try again.\n");
+  }
+  while(number < 0);
+
+  int binary_array_size = binary_calculator(number, binary_array, 1000) - 1; //array size = number of digits in binary - 1
+
+  printf("\n%d (base 10) in binary (base 2): ",number);
+  for(int i=binary_array_size; i>=0; i--) //prints the binary digits stored in the array in the opposite order
+  {
+    printf("%d",binary_array[i]);
+  }
+
+  return 0;
+}
+
+int binary_calculator(int number, int binary_array[], int count)
+{
+  int remainder, i = 0;
+
+  if(number == 0) //0 in any base converted to any base is 0
+  {
+    binary_array[0] = 0;
+    i++;
+  }   
+
+  else
+  {
+    //checks whether number of digits exceed the array size, and that the number is greater than 0
+    while(number > 0 && i <= count) 
+    {
+      remainder = number%2; //computes the remainder (binary digit) after dividing by 2
+      number /= 2; //divides number by 2 and stores in number
+
+      binary_array[i] = remainder; //stores the binary digit in the array
+      i++; //increments the index of the array
+    }
+  }
+
+  return i; //returns the number of digits in the binary number
+}
+

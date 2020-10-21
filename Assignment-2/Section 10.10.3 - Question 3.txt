@@ -1,0 +1,58 @@
+/*
+Question 3. The tab: 
+The program allows the user to compute and print the monthly purchase amount for each worker at the snack bar.
+*/
+//Ahmed Muntasir Hossain - 09/09/2020
+
+#include <stdio.h>
+#include <stdbool.h>
+
+void purchases(float[]); //user inputs purchase amount for the respective worker or guest ID, in the tabs array
+void bills(float[]); //prints the bill for each of the workers. Worker IDs: 1,2,3,4,5,6. Index of the tabs array = Worker ID
+
+int main()
+{
+  float tabs[] = {0,0,0,0,0,0,0}; //initially guest and workers have purchase amount of 0
+
+  purchases(tabs); //calls purchases()
+
+  bills(tabs); //calls bills()
+
+  return 0;
+}
+
+void purchases(float tabs[])
+{
+  int id; //ID of the workers (1-6) or guest (0)
+  int dollars, cents; //purhcase amount in dollars and cents
+  float amount; //total amount in dollars
+  printf("\n");
+
+  while(true) //prompts the user to enter ID number and corresponding purchase amount
+  {
+  printf("Enter the ID: ");
+  scanf("%d", &id);
+
+  if(id<0 || id>6) //breaks from loop if ID number is not between 0 and 6, inclusive
+    break;
+  
+  printf("Enter purhcase amount (in dollars and cents): ");
+  scanf("%d %d",&dollars, &cents);
+
+  amount = dollars + (float) cents/100; //calculates amount in dollars from dollars and cents
+  tabs[id] += amount; //adds purchase amount to the respective worker's or guest's tab. Worker ID = index of tabs[] array
+  }
+}
+
+void bills(float tabs[])
+{
+  printf("\nBill for the Workers:\n\n");
+  printf("ID        Amount Due\n");
+  printf("----------------------\n");
+
+  for(int i=1; i<=6; i++) //prints ID number and purchase amounts for each of the workers 
+  {
+    printf("%d          %6.2f\n",i,tabs[i]);
+  }
+}
+

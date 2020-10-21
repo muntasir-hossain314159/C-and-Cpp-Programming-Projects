@@ -1,0 +1,84 @@
+/*
+Question 03. Pointer and referent: 
+The program prints list of expressions in groups that are illegal, identical, change integer values, and change pointer values.
+*/
+//Ahmed Muntasir Hossain - 09/08/2020
+
+#include <stdio.h>
+
+int main(void) {
+  int ara[] = {11, 13, 17, 19, 23, 29, 31}; //array consisting of 7 elements
+  int *pt = ara; //pt points to the first element in the array
+  
+  /*
+  Lists grouped together based on illegal expressions, identical expressions, expressions that change integer values, and expressions that change pointer values
+  */
+  printf("Illegal Expressions:\n\n");
+
+  printf("address of *pt+3: \t -------------- contents:\t %p\n", /*&(*pt+3),*/ (*pt+3));
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *pt[3]: \t -------------- contents:\t --------------\n"/*, &(*pt[3]), (*pt[3])*/);
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of &*pt: \t -------------- contents:\t %p\n", /*&(&*pt),*/ (&*pt));
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of (*pt)++): -------------- contents:\t %p\n", /*&((*pt)++),*/ ((*pt)++));
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  //--------------------------------------------------------------------------------------
+  
+  printf("Expressions that have identical meanings:\n\n");
+
+  printf("address of pt:  \t %p contents:\t %p\n", &pt, pt); //1
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *&pt: \t %p contents:\t %p\n", &(*&pt), (*&pt)); //1
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+  
+  printf("address of *pt: \t %p contents:\t %p\n", &(*pt), (*pt)); //2
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *pt++: \t %p contents:\t %p\n", &(*pt++), (*pt++)); //2
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of pt[3]: \t %p contents:\t %p\n", &(pt[3]), (pt[3])); //3
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *(pt+3):\t %p contents:\t %p\n", &(*(pt+3)), (*(pt+3))); //3
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  //------------------------------------------------------------------------------------------
+
+  printf("Expressions that change integer values:\n\n");
+
+  printf("address of (*pt)++): -------------- contents:\t %p\n", /*&((*pt)++),*/ ((*pt)++));
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+  
+  printf("address of pt:  \t %p contents:\t %p\n", &pt, pt); //1
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *&pt: \t %p contents:\t %p\n", &(*&pt), (*&pt)); //1
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+  
+  printf("address of *pt: \t %p contents:\t %p\n", &(*pt), (*pt)); //2
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *pt++: \t %p contents:\t %p\n", &(*pt++), (*pt++)); //2
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of pt[3]: \t %p contents:\t %p\n", &(pt[3]), (pt[3])); //3
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  printf("address of *(pt+3):\t %p contents:\t %p\n", &(*(pt+3)), (*(pt+3))); //3
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+
+  //----------------------------------------------------------------------------------------
+
+  printf("Expressions that change pointer values:\n\n");
+  printf("address of pt:  \t %p contents:\t %p\n", &(*(pt++)), (*(pt++)));
+  printf("address of ara[0]: \t %p contents:\t %d\n\n", ara, ara[0]);
+  
+  return 0;
+}

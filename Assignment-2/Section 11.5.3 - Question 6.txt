@@ -1,0 +1,73 @@
+/*
+Question 6. Sorting: 
+The program allows the user to input three integers (for int a, int b, and int c) and then sorts them in ascending order (a<b<c).
+The program then prints the values in order.
+*/
+//Ahmed Muntasir Hossain - 09/08/2020
+
+#include <stdio.h>
+#include <ctype.h>
+
+//prints the values and addresses of the parameters. Prints the values of the inputted integers, and sorts them in ascending order
+void order(int*, int*, int*); 
+
+int main() 
+{
+  int a,b,c;
+  char response;
+
+  do
+  {
+  printf("\nEnter integer a: ");
+  scanf("%d", &a);
+  printf("Enter integer b: ");
+  scanf("%d", &b);
+  printf("Enter integer c: ");
+  scanf("%d", &c);
+
+  order(&a, &b, &c);
+
+  printf("\nOrder (a<b<c): \n");
+  printf("Integer a: %d\n", a);
+  printf("Integer b: %d\n", b);
+  printf("Integer c: %d\n", c);
+
+  printf("\nEnter 'Y' to continue, and 'N' to exit: ");
+  scanf(" %c", &response);
+  response = toupper(response);
+  }
+  while(response == 'Y');
+  
+  return 0;
+}
+
+void order(int *a, int *b, int *c)
+{
+  int temp; //temporary variable to store value during swaps between variables
+
+  //prints address of the pointer, content of the pointer (address of the variable), value of the varibale
+  printf("\naddress of *a:\t %p, content of *a:\t %p, value of a:\t %d\n", &a, a, *a);
+  printf("address of *b:\t %p, content of *b:\t %p, value of b:\t %d\n", &b, b, *b);
+  printf("address of *c:\t %p, content of *c:\t %p, value of c:\t %d\n", &c, c, *c);
+  
+  if(*a > *b) //check 1: condition checks whether 'a' is larger than 'b' 
+  {
+    temp = *a;
+    *a = *b;
+    *b = temp;
+  }
+
+  if(*b > *c) //check 2: condition checks whether 'b' is larger than 'c'
+  {
+    temp = *b;
+    *b = *c;
+    *c = temp;
+  }
+
+  if(*a > *b) //check 3: condition again checks whether 'a' is larger than 'b', after the first iteration (check 1 and check 2)
+  {
+    temp = *a;
+    *a = *b;
+    *b = temp;
+  }
+}
