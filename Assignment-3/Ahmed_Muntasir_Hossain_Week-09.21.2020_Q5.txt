@@ -1,0 +1,122 @@
+/*
+Question 05. Positive and negative: 
+The program allows the user to input real numbers, 
+compute the individual sum of the positive numbers and negative numbers, 
+count the number of values in each set (positive and negative), and calculate the average values of each set.
+*/
+//Ahmed Muntasir Hossain - 09/21/2020
+
+#include <stdio.h>
+
+#define N 10 //maximum number of values that can be inputted by the user
+
+void getData(float a[], int* n); //prompts the user to input values to be stored in the a[] array
+//computes the sum of the positive and negative numbers in the array and calculates the number of values in each set
+void sums(float a[], int n, float* sumPos, float* sumNeg, int* countPos, int* countNeg); 
+/*
+Prints the sum of positive and negative numbers. 
+Prints the count of the values in each set. 
+Prints the average value in each set.
+*/
+void printResults(float sumPos, float sumNeg, int countPos, int countNeg); 
+
+int main() 
+{
+  float a[N]; //a[] array to store the values inputted by the user
+  int n; //actual number of values inputted by the user
+
+  float sumPos; //sum of the positive numbers
+  float sumNeg; //sum of the negative numbers
+  int countPos; //number of positive values 
+  int countNeg; //number of negative values 
+
+  //prompts the user to input value in the array and returns the number of values inputted by reference
+  getData(a, &n); 
+
+  //returns the value of the sum and count of the positive and negative numbers by reference
+  sums(a, n, &sumPos, &sumNeg, &countPos, &countNeg);
+  
+  printResults(sumPos, sumNeg, countPos, countNeg);
+
+  return 0;
+}
+
+void getData(float a[], int* n)
+{
+  int i; //counter for loop
+  printf("Enter real numbers:\n");
+  for(i = 1; i <= 10; i++) //prompts the user to enter a maximum of 10 values
+  {
+    printf("%02d  ", i);
+    scanf("%g", &a[i-1]);
+    if(a[i-1] == 0) //breaks from loop when user enters 0
+      break;
+  }
+  *n = i; //returns the number of values inputted by reference to n variable in main
+
+  /*
+  If the user enters a maximum of 10 numbers without entering 0, 
+  the counter i would have a value of 11 when it breaks from the loop. 
+  Therefore, *n = i - 1, to represent the actual number of values entered.
+  */
+  if(i == 11) 
+    *n = i - 1;
+}
+
+void sums(float a[], int n, float* sumPos, float* sumNeg, int* countPos, int* countNeg)
+{
+  float localSumPos = 0; //sums the positive numbers at each iteration
+  float localSumNeg = 0; //sums the negative numbers at each iteration
+  int localCountPos = 0; //counts the number of positive values
+  int localCountNeg = 0; //counts the number of negative values
+
+  for(int i = 0; i < n; i++)
+  {
+    if(a[i] > 0) //condition is true when the number stored in the array is positive
+    {
+      localSumPos += a[i]; //the positive value is added to the sum
+      localCountPos++; //number of positive values is incremented
+    }
+    else if(a[i] < 0) //condition is true when the number stored in the array is negative
+    {
+      localSumNeg += a[i]; //the negative value is added to the sum
+      localCountNeg++; //number of negative values is incremented
+    }
+  }
+
+  *sumPos = localSumPos; //returns the value of the sum of positive numbers by reference
+  *sumNeg = localSumNeg; //returns the value of the sum of negative numbers by reference
+  *countPos = localCountPos; //returns the count of positive numbers by reference
+  *countNeg = localCountNeg; //returns the count of negative numbers by reference
+}
+
+void printResults(float sumPos, float sumNeg, int countPos, int countNeg)
+{
+  printf("\nResults:\n");
+  printf("Sum of Positive Real Numbers: %.3f\n", sumPos);
+  printf("Sum of Negative Real Numbers: %.3f\n", sumNeg);
+  printf("Count of Positive Real Numbers: %d\n", countPos);
+  printf("Count of Negative Real Numbers: %d\n", countNeg);
+
+  if(countPos > 0) //if the number of positive values is greater than 0, prints the average value of the positive set
+  {
+    float avgPos = sumPos / countPos;
+    printf("Average value of the positive set: %.3f\n", avgPos);
+  }
+  else //prints an error message since average cannot be computed of a null set. Count of positive values = 0
+  {
+    printf("Count of Positive Real Numbers is 0. Therefore, an average value of the positive set is undefined.\n");
+  }
+
+  if(countNeg > 0) //if the number of negative values is greater than 0, prints the average value of the negative set
+  {
+  float avgNeg = sumNeg / countNeg;
+  printf("Average value of the negative set: %.3f\n", avgNeg);
+  }
+  else //prints an error message since average cannot be computed of a null set. Count of negative values = 0.
+  {
+    printf("Count of Negative Real Numbers is 0. Therefore, an average value of the negative set is undefined.");
+  }
+}
+
+

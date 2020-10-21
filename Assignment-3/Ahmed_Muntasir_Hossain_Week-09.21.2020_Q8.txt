@@ -1,0 +1,113 @@
+/*
+Question 08. Sorting boxes: 
+The program allows the user to input lenght, width and height of boxes.
+The program computes the volume of the boxes and sorts them with a label (Big or Small)
+depending on whether the volume is above or below the mean.
+*/
+//Ahmed Muntasir Hossain - 09/21/2020
+
+#include <stdio.h>
+
+#define N 100 //maximum number of boxes
+
+void input_number_of_boxes(int* num_box); //prompts the user to input the number of boxes 
+//prompts the user to input length, width, and height of a box. The values are stored in three separate arrays.
+void get_data(double length[], double width[], double height[], int num_box); 
+//calculates the volume of each box and stores in volume_array[]
+void volume(double volume_array[], double length[], double width[], double height[], int num_box);
+//calculates the mean volume of the boxes and returns the value by reference
+void average(double volume_array[], int num_box, double* meanp);
+//prints the box number, volume of the box, length, width, height, and label
+void print_boxes(double volume_array[], double length[], double width[], double height[], int num_box, double mean);
+
+int main()
+{
+  double length[N]; //lenght[] array stores the length of each box
+  double width[N]; //width[] array stores the width of each box
+  double height[N]; //height[] array stores the height of each box
+  int num_box; //actual number of boxes
+
+  double mean; //mean volume of the boxes
+
+  input_number_of_boxes(&num_box); //returns the actual number of boxes by reference
+  get_data(length, width, height, num_box);
+
+  double volume_array[num_box]; //volume_array initialized with actual number of boxes
+  volume(volume_array, length, width, height, num_box);
+
+  average(volume_array, num_box, &mean);
+
+  print_boxes(volume_array, length, width, height, num_box, mean);
+
+  return 0;
+}
+
+void input_number_of_boxes(int* num_box)
+{
+  for(;;) //prompts the user to input the number of boxes within the legal range (1 - 100)
+  {
+    printf("\nEnter number of boxes (1 ... 100): ");
+    scanf("%d", num_box);
+
+    if(*num_box >= 1 && *num_box <= 100) //breaks from the loop if the values are within the legal range
+      break;
+    printf("Error. Please try again.\n");  //prints error message if the values are out of range
+  }
+}
+
+void get_data(double length[], double width[], double height[], int num_box)
+{
+  printf("\n");
+  
+  //prompts the user to input length, width, and height of each box at each iteration
+  for(int i = 0; i < num_box; i++)  
+  {
+    printf("%03d. Length of Box: ", i+1);
+    scanf("%lg", &length[i]);
+    printf("     Width of Box:  ");
+    scanf("%lg", &width[i]);
+    printf("     Height of Box: ");
+    scanf("%lg", &height[i]);
+    printf("\n");
+  }
+}
+
+void volume(double volume_array[], double length[], double width[], double height[], int num_box)
+{
+  for(int i = 0; i < num_box; i++) //computes the volume of each box at each iteration
+  {
+    volume_array[i] = length[i] * width[i] * height[i];
+  }
+}
+
+void average(double volume_array[], int num_box, double* meanp)
+{
+  double sum = 0; //sum of the the volume of the boxes
+  for(int i = 0; i < num_box; i++)
+  {
+    sum += volume_array[i];
+  }
+
+  /*
+  Returns the value of the mean by reference. 
+  Mean = Sum of the volume of the boxes / Number of Boxes
+  */
+  *meanp = sum / num_box; 
+}
+
+void print_boxes(double volume_array[], double length[], double width[], double height[], int num_box, double mean)
+{
+  printf("Box Number           Volume            Length          Width        Height        Label\n");
+  printf("---------------------------------------------------------------------------------------\n");
+  
+  //prints the box number, volume of the box, length, width, height, and label
+  for(int i = 0; i < num_box; i++) 
+  {
+    printf("%03d            %12.3f         %9.3f      %9.3f     %9.3f        ", i+1, volume_array[i], length[i], width[i], height[i]);
+    if(volume_array[i] <= mean) //if volume is less than or equal to mean, prints label as Small
+      printf("Small\n");
+    else
+      printf("  Big\n"); //if volume is greater than mean, prints label as Big
+  }
+}
+

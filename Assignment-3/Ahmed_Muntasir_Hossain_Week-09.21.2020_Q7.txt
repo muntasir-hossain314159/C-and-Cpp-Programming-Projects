@@ -1,0 +1,104 @@
+/*
+Question 07. Compound interest: 
+The program allows the user to input an amount in dollars (X), 
+annual interest rate (i), and time in years (n) to compute 
+amount of money user will have after the investment of X dollars or 
+amount of money user would have to invest for a return of X dollars.
+*/
+//Ahmed Muntasir Hossain - 09/21/2020
+
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+
+void getData(char* constant, double* amount, double* i, double* n); 
+double compoundInterestAmount(double P, double i, double n);
+double compoundInterestPrinciple(double A, double i, double n);
+
+int main()
+{
+  char constant; //response from the user to choose to calculate A or P
+  double amount; //amount of money inputted by the user
+  
+  double A; //amount of money user will have after an investment of P dollars
+  double P; //amount of money user invests for a return of A dollars
+  double i; //annual interest rate
+  double n; //time in years
+
+  //prompts the user to enter constant, amount, i, and n. Returns the mentioned values by reference.
+  getData(&constant, &amount, &i, &n); 
+  
+  /*
+  User chooses to calculate A.
+  compoundInterestAmount() function called and the value is set to A.
+  Prints value.
+  */
+  if(constant == 'A') 
+  {
+  P = amount; //P is set to the amount inputted by the user
+  A = compoundInterestAmount(P, i, n);
+  printf("\nAmount of money you will have after the investment: $%.3f", A);
+  }
+
+  /*
+  User chooses to calculate P. 
+  compoundInterestPrinciple() function called and the value is set to P. 
+  Prints value.
+  */
+  else if (constant == 'P')
+  {
+  A = amount; //A is set to the amount inputted by the user
+  P = compoundInterestPrinciple(A, i, n);
+  printf("\nAmount of money you need to invest: $%.3f", P);
+  }
+
+  return 0;
+}
+
+void getData(char* constant, double* amount, double* i, double* n)
+{
+  char localConstant;
+
+  for(;;) //prompts the user to enter legal values for i, n, and amount. Values must be greater than 0.
+  {
+  printf("Enter annual interest rate: ");
+  scanf("%lg", i);
+  printf("Enter the number of years: ");
+  scanf("%lg", n);
+  printf("Enter the amount of money in dollars: ");
+  scanf("%lg", amount);
+
+  if(*i > 0 && *n > 0 && *amount > 0) //if the values are within the legal range, breaks from the loop
+    break;
+  printf("Error. Please try again.\n\n"); //prints error message 
+  }
+  
+  do
+  {
+    //prompts the user to choose a constant for the choice of formula (A or P)
+    printf("\nEnter 'A' to calculate amount of money you will have after an investment of $%.3f, or\n"
+           "Enter 'P' to calculate amount of money you need to invest for a return of $%.3f: ", *amount, *amount);
+    scanf(" %c", &localConstant);
+    localConstant = toupper(localConstant);
+
+    //prints error message if response is not equal to A and P
+    if(localConstant != 'A' && localConstant != 'P') 
+      printf("Error. Please try again.\n");
+  }
+  while(localConstant != 'A' && localConstant != 'P');
+
+  *constant = localConstant; //returns the response from the user by reference
+}
+
+double compoundInterestAmount(double P, double i, double n) //calculates and returns the value of A
+{
+  double A = P * pow((1 + i), n);
+  return A;
+}
+
+double compoundInterestPrinciple(double A, double i, double n) //calculates and returns the value of P
+{
+  double P = A / (pow((1 + i), n));
+  return P;
+}
+

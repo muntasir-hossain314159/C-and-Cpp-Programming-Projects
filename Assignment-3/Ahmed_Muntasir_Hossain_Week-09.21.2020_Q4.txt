@@ -1,0 +1,116 @@
+/*
+Question 04. Exam grades: 
+The program allows the user to compute the grade of a student based on the standard deviaton from the mean.
+*/
+//Ahmed Muntasir Hossain - 09/21/2020
+
+#include <stdio.h>
+#include <math.h>
+
+#define N 15 //maximum number of students in the class
+
+void inputNumberOfScores(int* numScore); //prompts the user to input number of scores available
+void getData(double scores[], int numScore); //prompts the user to input scores of the students
+void stats(double scores[], int numScore, double* meanp, double* variancep); //computes the mean and variance of the scores
+void printStats(double mean, double standardDeviation); //prints the value of the mean and standard deviation of the scores
+void grades(double scores[], int numScore, double mean, double standardDeviation); //computes and prints the grades of the students
+
+int main() 
+{
+  double scores[N]; //array contains student scores
+  int numScore; //number of scores available
+
+  double mean; //mean of the scores
+  double variance; //variance of the scores
+  double standardDeviation; //standard deviation of the scores
+  
+  inputNumberOfScores(&numScore); //stores number of scores available by reference
+  getData(scores, numScore); //input student scores in scores[] array
+
+  stats(scores, numScore, &mean, &variance); 
+  standardDeviation = sqrt(variance); //computes standard deviation = sqrt(variance)
+
+  printStats(mean, standardDeviation);
+
+  grades(scores, numScore, mean, standardDeviation);
+  return 0;
+}
+
+void inputNumberOfScores(int* numScore)
+{
+  for(;;)
+  {
+  printf("Enter the number of scores (2 ... 15): ");
+  scanf("%d", numScore);
+  if(*numScore >= 2 && *numScore <= 15) //breaks from the for loop if the number of scores are within the acceptable range
+    break;  
+  printf("Error. Please try again.\n\n"); //prints error statement if the number of scores is not within the acceptable range
+  }
+}
+
+void getData(double scores[], int numScore)
+{
+  printf("Enter score:\n");
+  for(int i = 0; i < numScore; i++) //prompts the user to input scores of the students in the scores[] array
+  {
+    printf("%02d. ", i+1);
+    scanf("%lg", &scores[i]);
+  }
+}
+
+void stats(double scores[], int numScore, double* meanp, double* variancep)
+{
+  int i; //counter variable for computing sum for both mean and variance
+  double sum; //sum variable is used for mean and variance
+  double localMean; //mean value of the scores to be used when computing variance
+
+  for(i = 0, sum = 0; i < numScore; i++) //sums the value of the scores in each iteration and stores in the sum variable
+  {
+    sum += scores[i];
+  }
+  *meanp = localMean = sum / (double) numScore; //calculates mean of the scores and stores in the mean variable in main by reference
+
+  //sums the value of the squared difference in the score of a student and the mean each iteration, and stores in the sum variable
+  for(i = 0, sum = 0; i < numScore; i++) 
+  {
+    sum += pow((scores[i] - localMean), 2);
+  }
+  *variancep = sum / (double) (numScore - 1); //calculates variance of the scores and stores in the variance variable in main by reference
+}
+
+void printStats(double mean, double standardDeviation)
+{
+  printf("\nMean of Scores: %.3f\n", mean); //print the mean score
+  printf("Standard Deviation of Scores: %.3f\n\n", standardDeviation); //print the value of the standard deviation of the scores
+}
+
+void grades(double scores[], int numScore, double mean, double standardDeviation)
+{
+  double oneStdDevAboveTheMean = mean + standardDeviation; //calculates the score that is 1 standard deviation above the mean
+  double oneStdDevBelowTheMean = mean - standardDeviation; //calculates the score that is 1 standard deviation below the mean
+  double twoStdDevBelowTheMean = mean - 2 * standardDeviation; //calculates the score that is 2 standard deviations below the mean
+
+  printf("Grade of Students:\n\n");
+  printf("Student Number      Student Score       Grade\n");
+  printf("---------------------------------------------\n");
+  
+  for(int i = 0; i < numScore ; i++) //prints the student index number, score, and grade of the student each iteration
+  {
+    printf("%02d                     %7.3f            ", i, scores[i]);
+
+    if(scores[i] >= oneStdDevAboveTheMean) //Grade is A, if the score is greater than or equal to the mean plus the standard deviation
+      printf("A");
+    else if(scores[i] >= mean && scores[i] < oneStdDevAboveTheMean) //Grade is B if the score is between the mean and the mean plus the standard deviation
+      printf("B");
+    else if(scores[i] >= oneStdDevBelowTheMean && scores[i] < mean) //Grade is C, if the score is between the mean and the mean minus the standard deviation
+      printf("C");
+    //Grade is D, if the score is between the mean minus the standard deviation and the mean minus twice the standard deviation.
+    else if(scores[i] >= twoStdDevBelowTheMean && scores[i] < oneStdDevBelowTheMean) 
+      printf("D");
+    else if(scores[i] < twoStdDevBelowTheMean) //Grade is F, if the score is less than the mean minus twice the standard deviation
+      printf("F");
+
+    printf("\n");
+  }
+}
+
