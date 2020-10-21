@@ -1,0 +1,204 @@
+#include <iostream>
+#include <iomanip>
+#include <string.h>
+#include <ctype.h>
+
+using namespace std;
+
+void randomCardGenerator(int*, int*);
+void menu();
+void userGuessSuit(string[], int);
+void menuSuits(string[]);
+void userGuessRank(string[], int);
+void menuRanks(string[]);
+void endScreen(string[], string[], int, int);
+
+int main() 
+{
+  int randomSuitIndex;
+  int randomRankIndex;
+
+  string suit[] = {"HEARTS", "DIAMONDS", "CLUBS", "SPADES"};
+  string rank[] = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"};
+
+  randomCardGenerator(&randomSuitIndex, &randomRankIndex);
+
+  menu();
+
+  userGuessSuit(suit, randomSuitIndex);
+
+  userGuessRank(rank, randomRankIndex);
+
+  endScreen(suit, rank, randomSuitIndex, randomRankIndex);
+}
+
+
+void randomCardGenerator(int* randomSuitIndexPointer, int* randomRankIndexPointer)
+{
+  srand(time(NULL));
+
+  *randomSuitIndexPointer = rand() % 4;
+  *randomRankIndexPointer = rand() % 13;
+
+  cout << *randomSuitIndexPointer << endl;
+  cout << *randomRankIndexPointer << endl;  
+}
+
+void menu()
+{
+  cout << "Get Your Wish" << endl << endl;
+  cout << "I am a Genie!\nI can grant any wish of yours but there is a catch.\nI will choose a single card from this deck of cards and you have to guess which card I chose.\nIf you can guess the suit and rank of the card, your wish will be granted!" << endl << endl;
+
+  cout << "Let's Begin:" << endl << endl;
+}
+
+void userGuessSuit(string suit[], int randomSuitIndex)
+{
+  string userSuitInput;
+
+  cout << "Here are the suits: " << endl;
+  menuSuits(suit);
+
+  cout << "Please guess the suit of the card that I chose: " << flush;
+  cin >> userSuitInput;
+
+  int flag;
+  int check;
+  do
+  {
+    int inputLength = userSuitInput.length();
+    char cstringUserSuitInput[inputLength + 1];
+    strcpy(cstringUserSuitInput, userSuitInput.c_str());
+
+    for(int i = 0; i < userSuitInput.length(); i++)
+    {
+      cstringUserSuitInput[i] = toupper(cstringUserSuitInput[i]);
+    }
+
+    for(int i = 0; i < 4; i++)
+    {
+      flag = strcmp(cstringUserSuitInput, suit[i].c_str());
+      if(flag == 0)
+      {
+        check = strcmp(cstringUserSuitInput, suit[randomSuitIndex].c_str());
+        break;
+      }
+    }
+
+    if(flag != 0)
+    {
+      cout << endl << "Invalid Choice." << endl << endl;
+      cout << "Please choose from the following suits:" << endl;
+      menuSuits(suit);
+    }
+
+    else if(check != 0)
+    {
+      cout << "\nWrong Choice!\nPlease try again." << endl;
+      cout << "OR select 0 to quit!" << endl << endl;
+    }
+
+    else
+      break;
+    
+    cout << "Please Choose an Option: " << flush;
+
+    cin >> userSuitInput;
+
+    if(userSuitInput == "0")
+    {
+      cout << "\nThank you for playing!" << endl;
+      exit(0);
+    }
+  }
+  while(flag != 0 || check != 0);
+  cout << "You have guessed the correct suit of the card!" << endl;
+
+}
+
+void menuSuits(string suit[])
+{
+  for(int i = 0; i < 4; i++)
+  {
+    cout << i+1 << ". " << suit[i] << endl;  
+  }
+  cout << "OR select 0 to quit!" << endl << endl;
+}
+
+void userGuessRank(string rank[], int randomRankIndex)
+{
+  string userRankInput;
+
+  cout << "\nHere are the ranks: " << endl;
+  menuRanks(rank);
+
+  cout << "Please guess the rank of the card that I chose: " << flush;
+  cin >> userRankInput;
+
+  int flag;
+  int check;
+  do
+  {
+    int inputLength = userRankInput.length();
+    char cstringUserRankInput[inputLength + 1];
+    strcpy(cstringUserRankInput, userRankInput.c_str());
+
+    for(int i = 0; i < userRankInput.length(); i++)
+    {
+      cstringUserRankInput[i] = toupper(cstringUserRankInput[i]);
+    }
+
+    for(int i = 0; i < 13; i++)
+    {
+      flag = strcmp(cstringUserRankInput, rank[i].c_str());
+      if(flag == 0)
+      {
+        check = strcmp(cstringUserRankInput, rank[randomRankIndex].c_str());
+        break;
+      }
+    }
+
+    if(flag != 0)
+    {
+      cout << endl << "Invalid Choice." << endl << endl;
+      cout << "Please choose from the following ranks:" << endl;
+      menuRanks(rank);
+    }
+
+    else if(check != 0)
+    {
+      cout << "\nWrong Choice!\nPlease try again." << endl;
+      cout << "OR select 0 to quit!" << endl << endl;
+    }
+
+    else
+      break;
+    
+    cout << "Please Choose an Option: " << flush;
+
+    cin >> userRankInput;
+
+    if(userRankInput == "0")
+    {
+      cout << "\nThank you for playing!" << endl;
+      exit(0);
+    }
+  }
+  while(flag != 0 || check != 0);
+  cout << "You have guessed the correct rank of the card!" << endl;
+}
+
+void menuRanks(string rank[])
+{
+  for(int i = 0; i < 13; i++)
+  {
+    cout << setw(2) << i+1 << ". " << rank[i] << endl;  
+  }
+  cout << "OR select 0 to quit!" << endl << endl;
+}
+
+void endScreen(string suit[], string rank[], int randomSuitIndex, int randomRankIndex)
+{ 
+  cout << "\nCongratulations! You have guessed the correct card: " << rank[randomRankIndex] << " of " << suit[randomSuitIndex] << endl; 
+}
+
