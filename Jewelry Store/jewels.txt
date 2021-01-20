@@ -1,0 +1,10 @@
+diamond gold 1.75
+ruby platinum 2.50
+ruby silver 1.50
+opal platinum 4.00
+diamond silver 0.50
+sapphire gold 2.00
+opal platinum 3.75
+diamond gold 2.25
+ruby platinum 1.25
+opal gold 4.50
